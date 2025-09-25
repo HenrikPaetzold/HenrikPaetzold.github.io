@@ -1,0 +1,210 @@
+/* HEX COLORS to pick. make them your own! :)
+newRED       #A5ABAD
+newTEAL      #457B9D
+newNAVY      #1D3557
+newSAND      #F4A261
+newCREAM     #F1FAEE */
+
+html, body {
+    
+    background-color:   #19191c;
+    font-family:        'Roboto Mono',
+                        'Menlo',
+                        monospace;
+
+    font-size:  16px;
+    color:      #A5ABAD;
+}
+
+a {
+    color:              #fdbc24;
+    text-decoration:    none;
+    transition:         color 0.5s;
+    -webkit-transition: color 0.5s;
+    cursor: pointer;
+}
+
+a:hover {
+    color:              #9a1a34;
+    text-decoration:    none;
+    transition:         color 0.5s;
+    -webkit-transition: color 0.5s;
+}
+
+#all-of-it {
+    text-align:         left;
+    padding-top:        64px;
+    padding-left:       64px;
+    padding-right:      64px;
+    background-color:   #19191c;
+}
+
+#title {
+    font-size:          32px;
+    font-weight:        bold;
+    padding-bottom:     16px;
+}
+
+#sel {
+    background-color: white !important;
+}
+
+#subtitle {
+    font-size:      16px;
+    font-weight:    bold;
+    color:          #F1FAEE;
+    padding-bottom: 32px;
+}
+
+.list{
+    list-style-type: none;
+}
+
+.list-header{ 
+    padding-top:    32px;
+    font-size:      24px;
+    font-weight:    bold;
+    color:          #F1FAEE;
+    font-style:     bold;
+}
+
+.list-subheader {
+    padding-top:    16px;
+    font-size:      16px;
+    font-style:     bold;
+    color:          #F1FAEE;
+}
+
+#border {
+    flex-wrap:       wrap;
+    justify-content: center;
+    list-style-type: none;
+
+}
+
+ul {
+    /* padding-top:    8px; */
+    /* margin-bottom:  16px; */
+    margin:         4px;
+    list-style-type: none;
+}
+
+li {
+    /* margin-bottom:  2px; */
+    /* margin-top:     2px; */
+    margin:         4px;
+    list-style-type: none;
+}
+
+.emph {
+    color:              #A5ABAD;
+}
+
+.deemph {
+    color:              #F4A261;
+}
+
+.cpp-code {
+    color: #457B9D;
+    border-radius: 6px;
+    padding: 1px 4px;
+    background-color: #3e3e3e;
+    font-family:        'Roboto Mono',
+                        'Menlo',
+                        monospace;
+}
+
+.section-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.section {
+    /* keep size of secion fixed */
+    flex: 0 0 20em;
+    margin: 10px; /* Adds some space around each section */
+    /* Add more styling as needed */
+}
+
+.callout {
+    color: #E84545;
+}
+
+.prevent-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.callout{
+    color: #fdbc24;
+}
+
+.callout2{
+    color: #E84545;
+}
+
+.pulsating-text {
+    font-weight: bold;
+    animation: pulsate 1.5s ease-in-out infinite; /* Langsame Animation */
+}
+
+.darker-red {
+    color: #e52727;
+}
+
+.green {
+    color: #1da003;
+}
+
+.typing {
+    color: #ffffff;
+    animation: blink 1s steps(1) infinite; /* Blinkende Animation */
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.nolink {
+    pointer-events: none;
+    cursor: default;
+}
+
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes pulsate {
+    0%   { filter: brightness(85%); }
+    50%  { filter: brightness(115%); }
+    100% { filter: brightness(85%); }
+}
+
+.highlight-box {
+    border: 3px solid #e52727;   /* dunkleres Rot, fetter Rand */
+    margin: 15px 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    animation: pulsate 1.5s ease-in-out infinite;
+}
+
+.highlight-box a {
+    display: block;              /* macht den Link so groß wie die Box */
+    padding: 10px;               /* Abstand innen */
+    color: #e52727;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.highlight-box:hover {
+    border-color: #1da003;
+}
+
+.highlight-box:hover a {
+    color: #1da003;
+}

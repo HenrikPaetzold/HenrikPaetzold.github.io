@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+    <title>Snake</title>
+    <style>
+        /* Full-screen black background */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #19191c;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family:        'Roboto Mono',
+                        'Menlo',
+                        monospace;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Style for the instruction paragraph */
+        p {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="board"></canvas>
+    <p>Benutze W, A, S, D oder die Pfeiltasten um zu navigieren und vermeide den Rand :)</p>
+    <script src="snake.js"></script>
+</body>
+</html>
