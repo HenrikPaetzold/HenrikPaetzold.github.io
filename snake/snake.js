@@ -54,6 +54,14 @@ window.onload = function () {
 function update () {
     //game-over update stop
     if (gameOver) {
+        // score ist deine aktuelle Punktzahl (Zahl)
+        if (window.leaderboard && typeof window.leaderboard.report === "function") {
+            // Schutz, damit nicht mehrfach gemeldet wird:
+            if (!window._reportedToLb) {
+            window.leaderboard.report(score);
+            window._reportedToLb = true;
+            }
+        }
         blinkingHead += 1;
         if (blinkingHead > 2) {
             context.fillStyle = "tomato";

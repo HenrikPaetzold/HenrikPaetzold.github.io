@@ -1,43 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
-    <title>Snake</title>
-    <style>
-        /* Full-screen black background */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: #19191c;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family:        'Roboto Mono',
-                        'Menlo',
-                        monospace;
-        }
-
-        canvas {
-            display: block;
-        }
-
-        /* Style for the instruction paragraph */
-        p {
-            color: white;
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.2rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono" />
+  <title>Snake + Leaderboard</title>
+  <style>
+    :root {
+      --bg: #19191c;
+      --panel: #1f1f24;
+      --panel-2: #24242a;
+      --text: #f2f2f7;
+      --muted: #b8b8c7;
+      --accent: #26c281;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Roboto Mono','Menlo',monospace;
+      overflow: hidden;
+    }
+    .app {
+      height: 100%; width: 100%;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+    }
+    aside {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border-right: 1px solid #2c2c33;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    aside h1 {
+      font-size: 18px;
+      margin: 0 0 4px 0;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: -6px;
+    }
+    .row { display: flex; gap: 8px; }
+    input[type="text"] {
+      flex: 1;
+      background: #2a2a31;
+      border: 1px solid #35353d;
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 8px;
+      outline: none;
+    }
+    button {
+      background: var(--accent);
+      color: #0d0d0f;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+    ol {
+      list-style: none;
+      padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 8px;
+      counter-reset: rank;
+      overflow: auto;
+    }
+    li {
+      counter-increment: rank;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 8px;
+      background: #24242a;
+      border: 1px solid #2f2f36;
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+    li .name::before {
+      content: counter(rank) ".";
+      color: var(--muted);
+      margin-right: 6px;
+    }
+    li .score { font-weight: 800; }
+    main {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+    #board { display:block; }
+    .help {
+      position: absolute;
+      left: 50%; transform: translateX(-50%);
+      bottom: 8px; color: var(--muted);
+      font-size: 12px;
+      pointer-events: none;
+      user-select: none;
+      text-align: center;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-    <canvas id="board"></canvas>
-    <p>Benutze W, A, S, D oder die Pfeiltasten um zu navigieren und vermeide den Rand :)</p>
-    <script src="snake.js"></script>
+  <div class="app">
+    <aside>
+      <div>
+        <h1>Leaderboard</h1>
+        <div class="sub">Bestenliste (Top 10)</div>
+      </div>
+
+      <div class="row">
+        <input id="playerName" type="text" placeholder="Dein Name" maxlength="24" />
+        <button id="saveNameBtn">OK</button>
+      </div>
+      <div class="sub">Der Name wird lokal gespeichert; Score wird nach Game Over eingetragen.</div>
+
+      <ol id="scoreList" aria-live="polite"></ol>
+    </aside>
+    <main>
+      <canvas id="board"></canvas>
+      <div class="help">WASD / Pfeile steuern • vermeide den Rand :)</div>
+    </main>
+  </div>
+
+  
+  <script src="snake.js"></script>
+  <script>
+  // Deine Cloudflare-URL hier eintragen:
+  window.SCORE_API_URL = "https://icy-paper-7367.dd57kqh6gk.workers.dev/";
+  </script>
+  <script defer src="./leaderboard.js"></script>
+
+  <script src="leaderboard.js"></script>
 </body>
 </html>
