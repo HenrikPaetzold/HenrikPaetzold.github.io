@@ -30,6 +30,7 @@ var foodY = 0;
 
 // Game State
 var gameOver = false;
+var gameStarted = false; // 🟩 neu
 var blinkingHead = 0;
 var failReason = "";
 var score = 0;
@@ -40,26 +41,43 @@ window.onload = function () {
     board.width = columns * blockSize;
     context = board.getContext("2d");
 
-    //push initial values to arrays to avoid null-pointer
-    snakeBody.push([snakeX, snakeY]);
+    // initial draw screen
+    context.fillStyle = "black";
+    context.fillRect(0, 0, board.width, board.height);
+    context.font = "2rem Kumbh sans";
+    context.textAlign = "center";
+    context.fillStyle = "snow";
+    context.fillText("Press Space to start", blockSize * columns / 2, blockSize * rows / 2);
 
-    placeCollectables();
-
-    document.addEventListener("keydown", movement);
-
-    //update();
-    setInterval(update, 1000/10);
+    // 🟩 Warte auf Space zum Starten
+    window.addEventListener("keydown", startGame);
 }
 
-function update () {
+function startGame(e) { // 🟩 neu
+    if (e.code === "Space" || e.code === "Spacebar") {
+        window.removeEventListener("keydown", startGame);
+        gameStarted = true;
+        initGame();
+    }
+}
+
+function initGame() { // 🟩 neu — separiert Spiellogik vom Startbildschirm
+    //push initial values to arrays to avoid null-pointer
+    snakeBody = [[snakeX, snakeY]];
+    placeCollectables();
+    document.addEventListener("keydown", movement);
+    setInterval(update, 1000 / 10);
+}
+
+function update() {
+    if (!gameStarted) return; // 🟩 falls Spiel noch nicht läuft
+
     //game-over update stop
     if (gameOver) {
-        // score ist deine aktuelle Punktzahl (Zahl)
         if (window.leaderboard && typeof window.leaderboard.report === "function") {
-            // Schutz, damit nicht mehrfach gemeldet wird:
             if (!window._reportedToLb) {
-            window.leaderboard.report(score);
-            window._reportedToLb = true;
+                window.leaderboard.report(score);
+                window._reportedToLb = true;
             }
         }
         blinkingHead += 1;
@@ -71,7 +89,7 @@ function update () {
             else {
                 context.fillRect(snakeX, snakeY, blockSize, blockSize);
             }
-            if (blinkingHead === 4 ) {
+            if (blinkingHead === 4) {
                 blinkingHead = 0;
             }
         }
@@ -91,16 +109,21 @@ function update () {
         context.fillStyle = "snow";
         context.fillText("Game Over!", blockSize * columns / 2, blockSize * rows / 2 - 20);
         context.fillText("Score: " + score, blockSize * columns / 2, blockSize * rows / 2 + 20);
+        context.fillText("Press Space to restart", blockSize * columns / 2, blockSize * rows / 2 + 60);
+        if (!window._restartListenerAdded) {
+            window.addEventListener("keydown", game_over_restart);
+            window._restartListenerAdded = true;
+        }
         return;
     }
 
     //fill canvas with black background
     context.fillStyle = "black";
-    context.fillRect(0,0, board.width, board.height);
+    context.fillRect(0, 0, board.width, board.height);
 
     //update position
     lastX = snakeX;
-    lastY = snakeY
+    lastY = snakeY;
     snakeX += tempXspeed * blockSize;
     snakeY += tempYspeed * blockSize;
 
@@ -113,9 +136,7 @@ function update () {
         snakeBody.push([snakeX, snakeY]);
         placeCollectables();
         score += 1;
-    }
-    //remove snake tail
-    else {
+    } else {
         snakeBody.push([snakeX, snakeY]);
         snakeBody.shift();
     }
@@ -124,12 +145,10 @@ function update () {
     context.fillStyle = "salmon";
     context.fillRect(foodX, foodY, blockSize, blockSize);
 
-
     //draw snake body
     for (let i = 0; i < snakeBody.length; i++) {
-        //gameover check
         if (i !== snakeBody.length - 1 && snakeBody[i][0] === snakeX && snakeBody[i][1] === snakeY) {
-            gameOver = true;
+            endGame();
         }
         context.fillStyle = "seagreen";
         context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
@@ -137,32 +156,27 @@ function update () {
 
     //out of bounds check
     if ((snakeX < 0 || snakeX >= columns * blockSize) || (snakeY < 0 || snakeY >= rows * blockSize)) {
-        gameOver = true;
         failReason = "out of bounds";
+        endGame();
     }
 
     //draw snake head
     context.fillStyle = "lightseagreen";
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
 
-    //draw score
+    //draw score bar
     context.fillStyle = "#19191c";
-    context.fillRect(0, rows * blockSize, columns*blockSize, blockSize);
-
+    context.fillRect(0, rows * blockSize, columns * blockSize, blockSize);
     context.font = "20px Kumbh sans";
     context.textAlign = "start";
     context.fillStyle = "snow";
     context.fillText("Score: " + score, 25, blockSize * rows + 20);
-
 }
 
 function placeCollectables() {
-
-    //first assignment of random position
     foodX = Math.floor(Math.random() * columns) * blockSize;
     foodY = Math.floor(Math.random() * rows) * blockSize;
 
-    //free space check
     for (let i = 0; i < snakeBody.length; i++) {
         if (foodX === snakeBody[i][0] && foodY === snakeBody[i][1]) {
             placeCollectables();
@@ -171,24 +185,28 @@ function placeCollectables() {
 }
 
 function movement(o) {
-    if ((o.code === "KeyW" || o.code === "ArrowUp") && ySpeed !== 1){
+    if ((o.code === "KeyW" || o.code === "ArrowUp") && ySpeed !== 1) {
         tempXspeed = 0;
         tempYspeed = -1;
-    }
-    else if ((o.code === "KeyS" || o.code === "ArrowDown") && ySpeed !== -1) {
+    } else if ((o.code === "KeyS" || o.code === "ArrowDown") && ySpeed !== -1) {
         tempXspeed = 0;
         tempYspeed = 1;
-    }
-    else if ((o.code === "KeyA" || o.code === "ArrowLeft") && xSpeed !== 1) {
+    } else if ((o.code === "KeyA" || o.code === "ArrowLeft") && xSpeed !== 1) {
         tempXspeed = -1;
         tempYspeed = 0;
-    }
-    else if ((o.code === "KeyD" || o.code === "ArrowRight") && xSpeed !== -1) {
+    } else if ((o.code === "KeyD" || o.code === "ArrowRight") && xSpeed !== -1) {
         tempXspeed = 1;
         tempYspeed = 0;
     }
-    else if (o.code === "KeyR") {
+}
+
+function endGame() {
+    gameOver = true;
+}
+
+function game_over_restart(o) {
+    if (o.code === "Space" || o.code === "Spacebar") {
+        window.removeEventListener("keydown", game_over_restart);
         window.location.reload();
     }
-
 }
