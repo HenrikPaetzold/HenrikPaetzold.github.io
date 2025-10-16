@@ -30,7 +30,7 @@ var foodY = 0;
 
 // Game State
 var gameOver = false;
-var gameStarted = false; // 🟩 neu
+var gameStarted = false;
 var blinkingHead = 0;
 var failReason = "";
 var score = 0;
@@ -49,11 +49,10 @@ window.onload = function () {
     context.fillStyle = "snow";
     context.fillText("Press Space to start", blockSize * columns / 2, blockSize * rows / 2);
 
-    // 🟩 Warte auf Space zum Starten
     window.addEventListener("keydown", startGame);
 }
 
-function startGame(e) { // 🟩 neu
+function startGame(e) {
     if (e.code === "Space" || e.code === "Spacebar") {
         window.removeEventListener("keydown", startGame);
         gameStarted = true;
@@ -61,7 +60,7 @@ function startGame(e) { // 🟩 neu
     }
 }
 
-function initGame() { // 🟩 neu — separiert Spiellogik vom Startbildschirm
+function initGame() {
     //push initial values to arrays to avoid null-pointer
     snakeBody = [[snakeX, snakeY]];
     placeCollectables();
@@ -70,7 +69,7 @@ function initGame() { // 🟩 neu — separiert Spiellogik vom Startbildschirm
 }
 
 function update() {
-    if (!gameStarted) return; // 🟩 falls Spiel noch nicht läuft
+    if (!gameStarted) return;
 
     //game-over update stop
     if (gameOver) {
