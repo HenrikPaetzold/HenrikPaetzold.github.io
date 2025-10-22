@@ -1,3 +1,4 @@
+// leaderboard.js - gepatcht für nonce + events proof
 // Lightweight leaderboard with localStorage fallback and optional REST backend.
 // Exposes window.leaderboard.report(score) to be called on game over.
 
@@ -6,7 +7,6 @@
 	const NAME_KEY = "snake_player_name";
 	const MAX_ROWS = 10;
 
-	// If you deploy a backend, set: window.SCORE_API_URL = "https://your-endpoint.example/scores";
 	const API_URL =
 		(typeof window.SCORE_API_URL === "string" && window.SCORE_API_URL) || null;
 
@@ -63,6 +63,7 @@
 	}
 
 	function render(list) {
+		if (!els.list) return;
 		els.list.innerHTML = "";
 		for (const row of list) {
 			const li = document.createElement("li");
@@ -94,6 +95,30 @@
 		}
 	}
 
+	// --- NONCE / server push helpers ---
+	async function fetchNonce() {
+		// Fetch a fresh nonce from worker; store on window for the game to use.
+		if (!API_URL) {
+			window._scoreNonce = null;
+			return null;
+		}
+		try {
+			const res = await fetch(`${API_URL.replace(/\/$/, "")}/nonce`, { cache: "no-store" });
+			if (!res.ok) throw new Error("no-nonce");
+			const j = await res.json();
+			// worker returns { nonce, ts }
+			if (j && typeof j.nonce === "string") {
+				window._scoreNonce = j.nonce;
+				window._scoreNonceTs = j.ts || Date.now();
+				return j.nonce;
+			}
+		} catch (e) {
+			// ignore, keep nonce null
+		}
+		window._scoreNonce = null;
+		return null;
+	}
+
 	async function pushServerScore(entry) {
 		if (!API_URL) return;
 		try {
@@ -101,6 +126,7 @@
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(entry),
+				cache: "no-store",
 			});
 		} catch {}
 	}
@@ -121,9 +147,10 @@
 			if (!v) return;
 			setName(v);
 
-			els.hint.textContent = "Lade Highscore…";
+			if (els.hint) els.hint.textContent = "Lade Highscore…";
 
 			try {
+				if (!API_URL) throw new Error("no-api");
 				const res = await fetch(API_URL, {
 					headers: { Accept: "application/json" },
 					cache: "no-store",
@@ -136,14 +163,15 @@
 					(e) => sanitizeName(e.name).toLowerCase() === v.toLowerCase()
 				);
 				if (existing) {
-					els.hint.textContent = `Highscore für ${v}: ${existing.score}`;
+					if (els.hint) els.hint.textContent = `Highscore für ${v}: ${existing.score}`;
 				} else {
-					els.hint.textContent = `Noch kein Score für ${v}`;
+					if (els.hint) els.hint.textContent = `Noch kein Score für ${v}`;
 				}
 			} catch (err) {
-				els.hint.textContent = "Fehler beim Laden des Highscores.";
+				if (els.hint) els.hint.textContent = "Fehler beim Laden des Highscores.";
 			}
 
+			// refresh list (local+server)
 			refresh();
 		});
 
@@ -157,23 +185,73 @@
 		const name = sanitizeName(getName() || els.nameInput?.value || "");
 		if (!name) return; // No name set -> do nothing
 
-		const entry = { name, score: Math.floor(score), ts: Date.now() };
+		score = Math.floor(score);
 
 		// local write (merge max-by-name)
 		const cur = readLocal();
-		const merged = mergeAndSort([...cur, entry]);
+		const merged = mergeAndSort([...cur, { name, score }]);
 		writeLocal(merged);
 
-		// optional server push
-		pushServerScore(entry);
+		// --- NEW: attach proof (nonce + events) if available ---
+		const events = Array.isArray(window._ateEvents) ? window._ateEvents : null;
+		const nonce = typeof window._scoreNonce === "string" ? window._scoreNonce : null;
+
+		// Prefer to send proof if we have a server
+		if (API_URL && nonce && events) {
+			const payload = { name, score: Math.floor(score), nonce, events };
+			try {
+				const res = await fetch(API_URL, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(payload),
+					cache: "no-store",
+				});
+				// if server returns JSON with an error, act on it
+				if (res && res.headers.get("content-type")?.includes("application/json")) {
+					const j = await res.json();
+					if (!res.ok) {
+						console.warn("score rejected by server:", j);
+						// optional: surface to user
+						if (els.hint) els.hint.textContent = (j && j.error) ? `Score nicht akzeptiert: ${j.error}` : "Score nicht akzeptiert.";
+						// refresh UI from local (server not updated)
+						refresh();
+						// try to fetch a fresh nonce for next game
+						fetchNonce();
+						return;
+					} else {
+						// accepted — store server result if wanted
+						// optionally update local cache with accepted best score from server
+					}
+				}
+			} catch (e) {
+				// fallback: server unreachable -> keep local
+				console.warn("failed to push score to server", e);
+			}
+		} else {
+			// If we have an API but no nonce/events, attempt to refresh nonce for next round
+			if (API_URL && !nonce) fetchNonce();
+		}
 
 		// update UI
 		refresh();
+
+		// After reporting, optionally wipe the events so they can't be reused
+		try { window._ateEvents = []; window._scoreNonce = null; } catch (e) {}
 	}
 
 	// Boot
 	initName();
+	// fetch nonce proactively if we have API_URL
+	if (API_URL) fetchNonce().catch(()=>{});
 	refresh();
 
-	window.leaderboard = { report };
+	// Expose API
+	if (!window.leaderboard) {
+		Object.defineProperty(window, 'leaderboard', {
+			value: { report },
+			writable: false,
+			configurable: false,
+			enumerable: true
+		});
+	}
 })();

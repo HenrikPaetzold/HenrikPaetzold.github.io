@@ -54,6 +54,7 @@ window.onload = function () {
 
 function startGame(e) {
     if (e.code === "Space" || e.code === "Spacebar") {
+        score = 0
         window.removeEventListener("keydown", startGame);
         gameStarted = true;
         initGame();
@@ -132,6 +133,15 @@ function update() {
 
     //collision detection (with food)
     if (snakeX === foodX && snakeY === foodY) {
+        // --- EVENT COLLECTION (neu) ---
+        // grid coords (integer)
+        const gx = Math.floor(foodX / blockSize);
+        const gy = Math.floor(foodY / blockSize);
+        const now = Date.now();
+        window._ateEvents = window._ateEvents || [];
+        window._ateEvents.push({ x: gx, y: gy, t: now });
+        // -----------------------------------
+
         snakeBody.push([snakeX, snakeY]);
         placeCollectables();
         score += 1;
