@@ -62,22 +62,59 @@
 			.slice(0, MAX_ROWS);
 	}
 
-	function render(list) {
-		if (!els.list) return;
-		els.list.innerHTML = "";
-		for (const row of list) {
-			const li = document.createElement("li");
-			const name = document.createElement("div");
-			name.className = "name";
-			name.textContent = row.name;
-			const score = document.createElement("div");
-			score.className = "score";
-			score.textContent = row.score;
-			li.appendChild(name);
-			li.appendChild(score);
-			els.list.appendChild(li);
+function render(list) {
+	if (!els.list) return;
+	els.list.innerHTML = "";
+
+	const medals = [
+		{ emoji: "🥇", color: "#d4af37" },
+		{ emoji: "🥈", color: "#c0c0c0" },
+		{ emoji: "🥉", color: "#cd7f32" }
+	];
+
+	list.forEach((row, i) => {
+		const li = document.createElement("li");
+		const name = document.createElement("div");
+		name.className = "name";
+
+		if (i < 3) {
+	const emoji = document.createElement("span");
+	emoji.textContent = medals[i].emoji;
+	emoji.style.marginRight = "6px";
+
+	const glow = document.createElement("span");
+	glow.className = "glow";
+	glow.textContent = row.name;
+
+	name.appendChild(emoji);
+	name.appendChild(glow);
+}
+
+ else {
+			// Plätze 4+ → graue Nummerierung
+			const rank = document.createElement("span");
+			rank.className = "rank";
+			rank.textContent = `${i + 1}. `;
+			name.appendChild(rank);
+
+			const text = document.createTextNode(row.name);
+			name.appendChild(text);
+			name.style.color = "var(--text)";
 		}
-	}
+
+		const score = document.createElement("div");
+		score.className = "score";
+		score.textContent = row.score;
+
+		li.appendChild(name);
+		li.appendChild(score);
+		els.list.appendChild(li);
+	});
+}
+
+
+
+
 
 	async function fetchServerList() {
 		if (!API_URL) return null;
