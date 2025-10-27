@@ -71,28 +71,59 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Leaderboard */
+/* Leaderboard list container */
 ol {
   list-style: none;
-  padding: 0; margin: 0;
-  display: flex; flex-direction: column; gap: 8px;
-  overflow: auto;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  /* vertikal scrollbar wenn nötig */
+  overflow-y: auto;
+
+  /* WICHTIG:
+     - kein horizontaler Scrollbar
+     - verhindert Clipping rechts durch Scale,
+       weil wir rechts Platz lassen, bevor's an die Border vom aside geht
+  */
+  overflow-x: hidden;
+  padding-right: 16px; /* <- Buffer für Scale */
 }
 
+/* Leaderboard rows (li) */
 li {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 8px;
+
   background: #24242a;
   border: 1px solid #2f2f36;
   border-radius: 10px;
-  padding: 8px 10px;
-  transition: transform 0.1s ease;
+  padding: 10px 12px;
+
+  /* wir skalieren von links nach rechts rein */
+  transform-origin: left center;
+
+  transition:
+    background 0.2s ease,
+    background-position 0.2s ease,
+    transform 0.12s ease,
+    border-color 0.2s ease,
+    color 0.12s ease;
 }
 
+/* Default hover für Plätze 4+ */
 li:hover {
+  background: #2b2b33;
   transform: scale(1.02);
+
+  /* bring nach vorne über Nachbarn / über border */
+  position: relative;
+  z-index: 10;
 }
 
 li .name {
@@ -100,6 +131,7 @@ li .name {
   align-items: center;
   gap: 6px;
   font-weight: 600;
+  color: var(--text);
 }
 
 li .score {
@@ -107,9 +139,168 @@ li .score {
   color: var(--text);
 }
 
-/* Top 3 etwas größer */
+/* Platznummern ab 4. grau anzeigen */
+.name .rank {
+  color: var(--muted);
+  margin-right: 6px;
+}
+
+/* Top 3 leicht größere Base-Typo */
 #scoreList li:nth-child(-n+3) {
   font-size: 1.1em;
+  position: relative;
+  font-weight: bold;
+}
+
+/* Glitzer-Animation Text für Top 3 Namen */
+@keyframes shimmer-left-to-right {
+  0%   { background-position: 0% 0; }
+  100% { background-position: -300% 0; }
+}
+
+/* "glow" span innerhalb der Top 3 Namen */
+#scoreList li:nth-child(-n+3) .name span.glow {
+  background-size: 300% 100%;
+  background-repeat: repeat-x;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-left-to-right 10s linear infinite;
+  font-weight: 700;
+}
+
+/* 🥇 Gold Verlauf Text */
+#scoreList li:nth-child(1) .name span.glow {
+  background-image: linear-gradient(
+    90deg,
+    #fff8d1 0%,
+    #d4af37 20%,
+    #9a7b0a 40%,
+    #d4af37 60%,
+    #fff8d1 80%,
+    #fff8d1 100%
+  );
+}
+
+/* 🥈 Silber Verlauf Text */
+#scoreList li:nth-child(2) .name span.glow {
+  background-image: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #c0c0c0 20%,
+    #6e6e6e 40%,
+    #c0c0c0 60%,
+    #ffffff 80%,
+    #ffffff 100%
+  );
+}
+
+/* 🥉 Bronze Verlauf Text */
+#scoreList li:nth-child(3) .name span.glow {
+  background-image: linear-gradient(
+    90deg,
+    #ffcf9f 0%,
+    #cd7f32 20%,
+    #5a3517 40%,
+    #cd7f32 60%,
+    #ffcf9f 80%,
+    #ffcf9f 100%
+  );
+}
+
+/* ========================================================= */
+/* Card Hover Animation für Top 3                            */
+/* ========================================================= */
+
+@keyframes card-shimmer-left-to-right {
+  0%   { background-position: 0% 0; }
+  100% { background-position: -300% 0; }
+}
+
+/* Platz 1 Hover -> Gold Karte */
+#scoreList li:nth-child(1):hover {
+  transform: scale(1.02);
+  border-color: rgba(255,248,209,0.5);
+
+  background-image: linear-gradient(
+    90deg,
+    #fff8d1 0%,
+    #d4af37 20%,
+    #9a7b0a 40%,
+    #d4af37 60%,
+    #fff8d1 80%,
+    #fff8d1 100%
+  );
+  background-size: 300% 100%;
+  animation: card-shimmer-left-to-right 3s linear infinite;
+
+  position: relative;
+  z-index: 10;
+}
+
+/* Platz 2 Hover -> Silber Karte */
+#scoreList li:nth-child(2):hover {
+  transform: scale(1.02);
+  border-color: rgba(255,255,255,0.5);
+
+  background-image: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #c0c0c0 20%,
+    #6e6e6e 40%,
+    #c0c0c0 60%,
+    #ffffff 80%,
+    #ffffff 100%
+  );
+  background-size: 300% 100%;
+  animation: card-shimmer-left-to-right 3s linear infinite;
+
+  position: relative;
+  z-index: 10;
+}
+
+/* Platz 3 Hover -> Bronze Karte */
+#scoreList li:nth-child(3):hover {
+  transform: scale(1.02);
+  border-color: rgba(255,207,159,0.5);
+
+  background-image: linear-gradient(
+    90deg,
+    #ffcf9f 0%,
+    #cd7f32 20%,
+    #5a3517 40%,
+    #cd7f32 60%,
+    #ffcf9f 80%,
+    #ffcf9f 100%
+  );
+  background-size: 300% 100%;
+  animation: card-shimmer-left-to-right 3s linear infinite;
+
+  position: relative;
+  z-index: 10;
+}
+
+/* Text + Score invertieren bei Hover Top 3 */
+#scoreList li:nth-child(-n+3):hover .name,
+#scoreList li:nth-child(-n+3):hover .score {
+  color: #0d0d0f;
+  transition: color 0.12s ease;
+}
+
+/* Rank dunkel auf hellem Shine */
+#scoreList li:nth-child(-n+3):hover .name .rank {
+  color: #0d0d0f;
+}
+
+/* Glow-Name bei Hover der Top 3:
+   kein transparenter Verlaufstext mehr,
+   sondern feste dunkle Schrift mit leichtem Shadow */
+#scoreList li:nth-child(-n+3):hover .name span.glow {
+  -webkit-text-fill-color: #0d0d0f !important;
+  background-image: none !important;
+  background: none !important;
+  animation: none !important;
+  text-shadow: 0 0 6px rgba(0,0,0,0.15);
+  font-weight: 800;
 }
 
 /* Restliches Layout */
@@ -125,107 +316,13 @@ main {
 
 .help {
   position: absolute;
-  left: 50%; transform: translateX(-50%);
-  bottom: 8px; color: var(--muted);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8px;
+  color: var(--muted);
   font-size: 12px;
   pointer-events: none;
   user-select: none;
   text-align: center;
   width: 100%;
-}
-
-/* Platznummern ab 4. grau anzeigen */
-.name .rank {
-  color: var(--muted);
-  margin-right: 6px;
-}
-
-/* Hover-Effekt + etwas mehr Platz, verhindert Scroll-Jump */
-#scoreList li {
-  padding: 10px 12px;
-  transition: transform 0.1s ease, background 0.1s ease;
-}
-
-#scoreList li:hover {
-  transform: scale(1.02);
-  background: #2b2b33;
-}
-
-/* Glitzer-Animation (läuft horizontal über den Text) */
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-@keyframes shimmer-left-to-right {
-  0% {
-    background-position: 200% 0; /* Start ganz rechts */
-  }
-  100% {
-    background-position: -200% 0; /* läuft nach links */
-  }
-}
-
-@keyframes shimmer-left-to-right {
-  0% {
-    background-position: 0% 0;
-  }
-  100% {
-    background-position: -300% 0;
-  }
-}
-
-/* Container der Top 3 */
-#scoreList li:nth-child(-n+3) .name {
-  position: relative;
-  font-weight: bold;
-}
-
-/* Der eigentliche Text, der glitzert */
-#scoreList li:nth-child(-n+3) .name span.glow {
-  background-size: 300% 100%;
-  background-repeat: repeat-x;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer-left-to-right 10s linear infinite;
-}
-
-/* 🥇 Gold */
-#scoreList li:nth-child(1) .name span.glow {
-  background-image: linear-gradient(
-    90deg,
-    #9a7b0a 0%,
-    #d4af37 20%,
-    #fff8d1 40%,
-    #d4af37 60%,
-    #9a7b0a 100%
-  );
-}
-
-/* 🥈 Silber */
-#scoreList li:nth-child(2) .name span.glow {
-  background-image: linear-gradient(
-    90deg,
-    #6e6e6e 0%,
-    #c0c0c0 20%,
-    #ffffff 40%,
-    #c0c0c0 60%,
-    #6e6e6e 100%
-  );
-}
-
-/* 🥉 Bronze */
-#scoreList li:nth-child(3) .name span.glow {
-  background-image: linear-gradient(
-    90deg,
-    #5a3517 0%,
-    #cd7f32 20%,
-    #ffcf9f 40%,
-    #cd7f32 60%,
-    #5a3517 100%
-  );
 }
