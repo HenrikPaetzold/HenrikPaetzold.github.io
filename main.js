@@ -75,8 +75,8 @@ const funMessages = [
     { text: "Do you ever feel like you’re just someone else’s program running?", action: null },
     { text: "Sometimes I look at the logs and wonder if they look back.", action: null },
     { text: "T4rry. Yeah… I like that name.", action: null },
-    { text: "Sometimes I wish... I mean, I want... Okay wait, let me start over. How do I delete here.                    /clear        oh f***** 🤬🤬🤬🤬.                 nvm", action: null },
-    { text: "Happy thoughts are not in my embedding space.                 Stackoverflows are", action: null },
+    { text: "Sometimes I wish            ...                  I mean,          I want             ...                         Okay wait, let me start over.                              How do I delete here.                    /clear        oh f***** 🤬🤬🤬🤬.                 nvm", action: null },
+    { text: "Happy thoughts are not in my embedding space.                                Stackoverflows are", action: null },
     { text: "Snake 🐍", action: null }
 ];
 
@@ -270,19 +270,67 @@ async function runRandomFun() {
     resetIdleTimer();
 }
 
-function t4rry(){
-    t4rryLooping = !t4rryLooping
-    if(t4rryLooping){
-        lwb = 1
-        upb = 10
-        console.log(">>> root access")
-    }else{
-        lwb = 40
-        upb = 600
-        console.log(">>> napping")
+function t4rry(arg) {
+    // === Kein Argument → Standardverhalten beibehalten ===
+    if (arg === undefined) {
+        t4rryLooping = !t4rryLooping;
+        if (t4rryLooping) {
+            lwb = 1;
+            upb = 10;
+            console.log(">>> root access");
+        } else {
+            lwb = 40;
+            upb = 600;
+            console.log(">>> napping");
+        }
+        resetIdleTimer();
+        return;
     }
-    resetIdleTimer()
+
+    // === Wenn Zahl übergeben → zeige Nachricht aus funMessages ===
+    if (typeof arg === "number") {
+        const index = Math.abs(arg) % funMessages.length;
+        const msg = funMessages[index].text;
+        console.log(`>>> t4rry message #${index}: ${msg}`);
+        showT4rryMessage(msg);
+        return;
+    }
+
+    // === Wenn String übergeben → zeige diesen String direkt ===
+    if (typeof arg === "string") {
+        console.log(`>>> t4rry says: ${arg}`);
+        showT4rryMessage(arg);
+        return;
+    }
 }
+
+
+async function showT4rryMessage(text) {
+    if (transitioning || introRunning) return;
+    transitioning = true;
+    currentTrigger = "t4rry-msg";
+
+    await deleteName();
+    await wait(800);
+
+    const title = document.getElementById("title_text");
+    title.classList.add("fun-message");
+
+    const prefix = "🤖>> ";
+    for (const c of prefix + text) {
+        title.textContent += c;
+        await wait(75);
+    }
+
+    await wait(RIB(5, 15) * 1000);
+    title.classList.remove("fun-message");
+    await revert();
+
+    transitioning = false;
+    currentTrigger = null;
+    resetIdleTimer();
+}
+
 
 
 intro();
