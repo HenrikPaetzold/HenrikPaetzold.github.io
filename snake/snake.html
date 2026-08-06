@@ -1,43 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono" />
   <title>Snake</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
-    <aside>
-      <div>
-        <h1>Leaderboard</h1>
-        <div class="sub">Bestenliste (Top 10)</div>
-      </div>
-
-      <div class="row">
-        <input id="playerName" type="text" placeholder="Dein Name" maxlength="24" />
-        <button id="saveNameBtn">OK</button>
-      </div>
-      <div id="highscoreHint" class="sub"></div>
-      <div class="sub"><span style="color: rgb(218, 0, 0)">Nur NETHZ-Kürzel zählen. </span>Ein höherer Score überschreibt den alten.</div>
-
-      <ol id="scoreList" aria-live="polite"></ol>
-    </aside>
-    <main>
-      <canvas id="board"></canvas>
-      <div class="help">WASD / Pfeile steuern • vermeide den Rand :)</div>
-    </main>
-  </div>
-
-  
-  <script src="snake.js"></script>
+  <div id="root"></div>
   <script>
-  // Deine Cloudflare-URL hier eintragen:
   window.SCORE_API_URL = "https://icy-paper-7367.dd57kqh6gk.workers.dev/";
   </script>
-  <script defer src="./leaderboard.js"></script>
-
-  <script src="leaderboard.js"></script>
+  <script type="module" src="/src/pages/snake/main.tsx"></script>
 </body>
 </html>

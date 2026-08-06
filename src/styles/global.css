@@ -1,12 +1,4 @@
-/* HEX COLORS to pick. make them your own! :)
-newRED       #A5ABAD
-newTEAL      #457B9D
-newNAVY      #1D3557
-newSAND      #F4A261
-newCREAM     #F1FAEE */
-
 html, body {
-    
     background-color:   #19191c;
     font-family:        'Roboto Mono',
                         'Menlo',
@@ -60,7 +52,7 @@ a:hover {
     list-style-type: none;
 }
 
-.list-header{ 
+.list-header{
     padding-top:    32px;
     font-size:      24px;
     font-weight:    bold;
@@ -83,15 +75,11 @@ a:hover {
 }
 
 ul {
-    /* padding-top:    8px; */
-    /* margin-bottom:  16px; */
     margin:         4px;
     list-style-type: none;
 }
 
 li {
-    /* margin-bottom:  2px; */
-    /* margin-top:     2px; */
     margin:         4px;
     list-style-type: none;
 }
@@ -121,10 +109,8 @@ li {
 }
 
 .section {
-    /* keep size of secion fixed */
     flex: 0 0 20em;
-    margin: 10px; /* Adds some space around each section */
-    /* Add more styling as needed */
+    margin: 10px;
 }
 
 .callout {
@@ -132,9 +118,9 @@ li {
 }
 
 .prevent-select {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .callout{
@@ -147,7 +133,7 @@ li {
 
 .pulsating-text {
     font-weight: bold;
-    animation: pulsate 1.5s ease-in-out infinite; /* Langsame Animation */
+    animation: pulsate 1.5s ease-in-out infinite;
 }
 
 .darker-red {
@@ -160,7 +146,7 @@ li {
 
 .typing {
     color: #ffffff;
-    animation: blink 1s steps(1) infinite; /* Blinkende Animation */
+    animation: blink 1s steps(1) infinite;
 }
 
 .hidden {
@@ -185,7 +171,7 @@ li {
 }
 
 .highlight-box {
-    border: 3px solid #e52727;   /* dunkleres Rot, fetter Rand */
+    border: 3px solid #e52727;
     margin: 15px 0;
     text-align: center;
     font-weight: bold;
@@ -194,8 +180,8 @@ li {
 }
 
 .highlight-box a {
-    display: block;              /* macht den Link so groß wie die Box */
-    padding: 10px;               /* Abstand innen */
+    display: block;
+    padding: 10px;
     color: #e52727;
     text-decoration: none;
     transition: color 0.2s ease-in-out;
