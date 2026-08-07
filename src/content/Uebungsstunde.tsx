@@ -1,6 +1,6 @@
 import type { PageContent } from './types'
 
-export function Uebungsstunde({ uebungsstunde }: { uebungsstunde: PageContent['uebungsstunde'] }) {
+export function Uebungsstunde({ uebungsstunde }: { uebungsstunde: NonNullable<PageContent['uebungsstunde']> }) {
   return (
     <>
       <div className="list-subheader">Übungsstunde</div>

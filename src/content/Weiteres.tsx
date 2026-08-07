@@ -1,6 +1,7 @@
 import type { WeiteresRow } from './types'
 
 export function Weiteres({ rows }: { rows: WeiteresRow[] }) {
+  if (rows.length === 0) return null
   return (
     <>
       <div className="list-subheader">Weiteres</div>

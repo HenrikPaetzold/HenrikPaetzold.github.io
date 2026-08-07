@@ -7,6 +7,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
+        index: resolve(__dirname, 'index.html'),
         eprog24: resolve(__dirname, 'eprog24.html'),
         eprog25: resolve(__dirname, 'eprog25.html'),
         pong: resolve(__dirname, 'pong/index.html'),

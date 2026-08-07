@@ -2,6 +2,7 @@ import type { Notice } from './types'
 import { TagBadge } from './TagBadge'
 
 export function NoticeBoard({ notices }: { notices: Notice[] }) {
+  if (notices.length === 0) return null
   return (
     <>
       <div className="list-subheader">Mitteilungen</div>

@@ -21,7 +21,7 @@ export function SemesterPage({ content, withAnimator }: { content: PageContent; 
       <ResourceList resources={content.resources} />
       <Weiteres rows={content.weiteres} />
       <Kontakt kontakt={content.kontakt} />
-      <Uebungsstunde uebungsstunde={content.uebungsstunde} />
+      {content.uebungsstunde && <Uebungsstunde uebungsstunde={content.uebungsstunde} />}
     </PageShell>
   )
 }

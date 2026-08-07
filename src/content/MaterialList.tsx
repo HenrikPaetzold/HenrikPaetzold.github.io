@@ -11,6 +11,7 @@ function Slot({ slot, fallback }: { slot: MaterialSlot; fallback: string }) {
 }
 
 export function MaterialList({ materials }: { materials: MaterialEntry[] }) {
+  if (materials.length === 0) return null
   return (
     <>
       <div className="list-subheader">Unterlagen</div>

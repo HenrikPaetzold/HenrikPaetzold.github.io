@@ -24,5 +24,5 @@ export type PageContent = {
   resources: ResourceRow[]
   weiteres: WeiteresRow[]
   kontakt: { href: string; localPart: string; domain: string }
-  uebungsstunde: { day: string; time: string; room: string }
+  uebungsstunde?: { day: string; time: string; room: string }
 }
