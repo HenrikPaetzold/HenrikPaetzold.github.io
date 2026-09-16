@@ -3,7 +3,7 @@ import type { PageContent } from '../content/types'
 export const indexContent: PageContent = {
   titleInitialText: 'Willkommen',
   notices: [
-    { date: '[15.09.2026]', items: [{ text: 'Website online', tag: { label: '[Aktuell]', variant: 'green' } } ] },
+    { date: '[15.09.2026]', items: [{ text: 'Website & u01 online', tag: { label: '[Aktuell]', variant: 'green' } } ] },
   ],
   materials: [
     {
