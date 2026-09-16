@@ -1,6 +1,7 @@
 import type { MaterialEntry, MaterialSlot } from './types'
 
-function Slot({ slot, fallback }: { slot: MaterialSlot; fallback: string }) {
+function Slot({ slot, fallback }: { slot: MaterialSlot | undefined; fallback: string }) {
+  if (!slot) return <span>{fallback}</span>
   if ('disabled' in slot) return <span>{slot.label}</span>
   if ('emptyHref' in slot) return <a target="_blank" rel="noopener noreferrer">{slot.label}</a>
   return (
@@ -39,9 +40,7 @@ export function MaterialList({ materials }: { materials: MaterialEntry[] }) {
                 entry.label
               ) : (
                 <>
-                  {entry.handout && <Slot slot={entry.handout} fallback="Handout" />}
-                  {entry.handout && entry.folien && ' | '}
-                  {entry.folien && <Slot slot={entry.folien} fallback="Folien" />}
+                  <Slot slot={entry.handout} fallback="Handout" /> | <Slot slot={entry.folien} fallback="Folien" />
                 </>
               )}
             </li>

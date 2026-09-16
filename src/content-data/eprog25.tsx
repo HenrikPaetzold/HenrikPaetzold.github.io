@@ -1,34 +1,25 @@
 import type { PageContent } from '../content/types'
 
 export const eprog25: PageContent = {
-  titleInitialText: 'Viel Glück 🍀🍀',
+  titleInitialText: 'EProg25 - Archiv',
+  highlightBox: { href: 'https://henrikpaetzold.de', label: 'Zurück zum aktuellen Inhalt (HS26)' },
   notices: [
     {
-      date: '[06.08.2026]',
+      date: '[15.09.2026]',
       items: [
         {
           tag: { label: '[Disclaimer]', variant: 'darker-red' },
           text: (
             <>
-              Diese Seite enthält meine privaten Notizen und Materialien zur Übung.{' '}
+              Diese Seite enthält alle Slides für die Repetentenübung aus dem HS25.{' '}
               <span className="darker-red">
-                Sie wird nicht offiziell durch das Vorlesungs- oder Head-TA-Team geprüft.
+                Sie wird nicht mehr gepflegt und wurde nicht auf Korrektheit durch das Head-TA- oder Vorlesungsteam
+                überprüft.
               </span>{' '}
-              Inhalte können daher Fehler enthalten oder vom tatsächlichen Übungsablauf abweichen.
+              Die Slides und Übungsaufgaben des aktuellen Jahres können sich gegenüber dem HS24 durchaus ändern, um
+              besser an einen möglicherweise veränderten Vorlesungsablauf angepasst zu werden.
             </>
           ),
-        },
-      ],
-    },
-    {
-      date: '[10.12.2025]',
-      items: [{ text: 'Lösung für ItemFactory online', tag: { label: '[Aktuell]', variant: 'green' } }],
-    },
-    {
-      date: '[03.12.2025]',
-      items: [
-        {
-          text: 'Die Musterlösung für TheoSim1 entspricht von der Bewertung einem früher üblichen Worst-Case-Erwartungshorizont. Zwar wurde nach dem Dozierendenwechsel in den letzten Jahren nachsichtiger korrigiert, eine verlässliche Aussage über die diesjährige Bewertung ist jedoch nicht möglich.',
         },
       ],
     },
@@ -82,52 +73,9 @@ export const eprog25: PageContent = {
     },
     { code: 'U14', handout: { emptyHref: true, label: 'Handout' }, folien: { href: '/downloads/eprog25/u14.pdf' } },
   ],
-  resources: [
-    {
-      label: '[ProgSim1]',
-      links: [
-        { href: '/downloads/eprog25/additional_material/ProgSim1.zip', label: 'IntelliJ Projekt' },
-        { href: '/downloads/eprog25/additional_material/ProgSim1.pdf', label: 'Aufgabenstellung' },
-        { href: '/downloads/eprog25/additional_material/GradingTests.zip', label: 'Grading-Tests' },
-        { href: '/downloads/eprog25/additional_material/ProgSim1Sol.zip', label: 'Musterlösung' },
-      ],
-    },
-    {
-      label: '[TheoSim1]',
-      links: [
-        { href: '/downloads/eprog25/additional_material/TheoSim1.pdf', label: 'Aufgabenstellung' },
-        { href: '/downloads/eprog25/additional_material/TheoSim1Sol.pdf', label: 'Musterlösung', sameTab: true },
-      ],
-    },
-    {
-      label: '[NodeTree]',
-      links: [
-        { href: '/downloads/eprog25/additional_material/NodeTree.zip', label: 'IntelliJ Projekt' },
-        { href: '/downloads/eprog25/additional_material/NodeTree.pdf', label: 'Aufgabenstellung' },
-      ],
-    },
-    {
-      label: '[TimedBo1]',
-      links: [{ href: '/downloads/eprog25/additional_material/hpaetzold_[Game].zip', label: 'Meine Lösung' }],
-    },
-    {
-      label: '[ItemFactory]',
-      links: [{ href: '/downloads/eprog25/additional_material/ItemFactorySol.zip', label: 'Meine Lösung' }],
-    },
-    {
-      label: '[🎄🎄Weihnachtskahoot🎄🎄]',
-      tagVariant: 'green',
-      links: [{ href: 'https://create.kahoot.it/details/19c77801-a62d-4aad-bcb5-9cc9fa47b38f?drawer=', label: 'Link' }],
-    },
-    {
-      label: '[Bonus13]',
-      tagVariant: 'green',
-      links: [{ href: '/downloads/eprog25/additional_material/u13-bonus.zip', label: 'Meine Lösung' }],
-    },
-  ],
+  resources: [],
   weiteres: [
     { label: '[🔒NETHZ-Login]', href: 'https://lec.inf.ethz.ch/infk/eprog/2025/', linkLabel: 'Vorlesungswebsite' },
-    { label: '[🗃️Archiviert]', href: 'eprog24.html', linkLabel: 'EProg24' },
   ],
   kontakt: {
     href: 'mailto:hpaetzold@student.ethz.ch?subject=[EProg25] Mein Betreff',

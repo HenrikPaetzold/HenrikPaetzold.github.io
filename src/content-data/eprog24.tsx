@@ -2,7 +2,7 @@ import type { PageContent } from '../content/types'
 
 export const eprog24: PageContent = {
   titleInitialText: 'EProg24 - Archiv',
-  highlightBox: { href: 'https://henrikpaetzold.de', label: 'Zurück zum aktuellen Inhalt (HS25)' },
+  highlightBox: { href: 'https://henrikpaetzold.de', label: 'Zurück zum aktuellen Inhalt (HS26)' },
   notices: [
     {
       date: '[16.09.2025]',

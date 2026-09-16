@@ -15,6 +15,8 @@ function RIB(min: number, max: number) {
 }
 
 const TRIGGER_WORDS = ['pong', 'snake', 't4rry'] as const
+const IDLE_LWB = 300
+const IDLE_UPB = 3600
 
 export class TitleAnimator {
   private keys: string[] = []
@@ -23,8 +25,8 @@ export class TitleAnimator {
   private queuedIntroTrigger: (() => void) | null = null
   private idleTimeout: ReturnType<typeof setTimeout> | null = null
   private t4rryLooping = false
-  private lwb = 40
-  private upb = 600
+  private lwb = IDLE_LWB
+  private upb = IDLE_UPB
   private destroyed = false
 
   constructor(
@@ -189,8 +191,8 @@ export class TitleAnimator {
         this.upb = 10
         console.log('>>> root access')
       } else {
-        this.lwb = 40
-        this.upb = 600
+        this.lwb = IDLE_LWB
+        this.upb = IDLE_UPB
         console.log('>>> napping')
       }
       this.resetIdleTimer()
